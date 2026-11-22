@@ -1,0 +1,7 @@
+# Configuration locale (contient la clé API)
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/

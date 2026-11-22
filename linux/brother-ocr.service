@@ -1,0 +1,23 @@
+# Service systemd utilisateur pour Brother OCR.
+# Installé par linux/install.sh, qui remplace @REPO_DIR@ par le chemin du dépôt.
+# Réglages (clé API, fournisseur, dossiers) : ~/.config/brother-ocr/env
+
+[Unit]
+Description=Brother OCR - surveillance des scans et OCR par LLM vision
+Documentation=file://@REPO_DIR@/README.md
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=simple
+WorkingDirectory=@REPO_DIR@
+EnvironmentFile=-%h/.config/brother-ocr/env
+Environment=PYTHONUNBUFFERED=1
+ExecStart=@REPO_DIR@/.venv/bin/python @REPO_DIR@/brother_ocr.py
+Restart=on-failure
+RestartSec=10
+# Code 78 = configuration invalide (ex. clé absente) : inutile de relancer en boucle
+RestartPreventExitStatus=78
+
+[Install]
+WantedBy=graphical-session.target
